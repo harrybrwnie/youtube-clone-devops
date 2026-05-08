@@ -10,14 +10,14 @@ pipeline {
         // ID 'docker' phải trùng với ID bạn tạo trong Credentials
         DOCKERHUB_CREDENTIALS = credentials('docker')
         APP_NAME = "youtube-clone"
-        DOCKER_USER = "TEN_DANG_NHAP_DOCKER_CUA_BAN" // <-- Thay username của bạn
+        DOCKER_USER = "h4rrybrwnie"
     }
 
     stages {
         stage('1. Lay Code') {
             steps {
                 echo 'Dang keo code tu GitHub...'
-                git branch: 'main', url: 'https://github.com/TEN_CUA_BAN/youtube-clone-devops.git' // <-- Thay URL của bạn
+                git credentialsId: 'github-token', branch: 'main', url: 'https://github.com/harrybrwnie/youtube-clone-devops.git'
             }
         }
 
