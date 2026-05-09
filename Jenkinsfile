@@ -2,15 +2,15 @@ pipeline {
     agent any
 
     tools {
-        // Tên 'node16' phải trùng với tên bạn đặt trong Manage Jenkins -> Tools
         nodejs 'node16'
+        'hudson.plugins.sonar.SonarRunnerInstallation' 'sonar-scanner'
     }
 
     environment {
-        // ID 'docker' phải trùng với ID bạn tạo trong Credentials
         DOCKERHUB_CREDENTIALS = credentials('docker')
         APP_NAME = "youtube-clone"
         DOCKER_USER = "h4rrybrwnie"
+        SCANNER_HOME = tool 'sonar-scanner'
     }
 
     stages {
@@ -21,7 +21,29 @@ pipeline {
             }
         }
 
-        stage('2. Cai dat thu vien') {
+        stage('2. Quet code (SonarQube)') {
+             steps {
+                echo 'Gui code sang SonarQube kiem tra'
+                withSonarQubeEnv('sonar-server') { 
+                    sh '''
+                    $SCANNER_HOME/bin/sonar-scanner \
+                    -Dsonar.projectName=${APP_NAME} \
+                    -Dsonar.projectKey=${APP_NAME}
+                    '''
+                }
+            }
+        }
+
+        stage('3. Quality Gate') {
+             steps {
+                echo 'Dang doi ket qua tu SonarQube...'
+                timeout(time: 1, unit: 'HOURS') {
+                    waitForQualityGate abortPipeline: true 
+                }
+            }
+        }
+
+        stage('4. Cai dat thu vien') {
             steps {
                 echo 'Dang chay npm install...'
                 sh 'npm install'
