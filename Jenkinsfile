@@ -4,7 +4,6 @@ pipeline {
     tools {
         nodejs 'node16'
         'hudson.plugins.sonar.SonarRunnerInstallation' 'sonar-scanner'
-        'org.jenkinsci.plugins.DependencyCheck.tools.DependencyCheckInstallation' 'DP-Check'
     }
 
     environment {
@@ -12,7 +11,6 @@ pipeline {
         APP_NAME = "youtube-clone"
         DOCKER_USER = "h4rrybrwnie"
         SCANNER_HOME = tool 'sonar-scanner'
-        NVD_API_KEY = credentials('nvd-api-key')
     }
 
     stages {
@@ -39,13 +37,10 @@ pipeline {
 //        }
 
 
-        stage('3. Quet Thu vien (OWASP SCA)') {
+        stage('3. Quet Thu vien (Trivy FS)') {
             steps {
-                echo 'Bat dau quet lo hong thu vien...'
-                withEnv(['JAVA_OPTS=-Xmx1536m -XX:+UseG1GC']) {
-                    dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableRetireJS --nvdApiKey ${NVD_API_KEY}', odcInstallation: 'DP-Check'
-                }
-                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+                echo 'Bat dau quet thu vien bang Trivy...'
+                sh "trivy fs --format table -o trivy-fs-report.txt --severity HIGH,CRITICAL ."
             }
         }
         stage('4. Cai dat thu vien') {
