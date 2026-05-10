@@ -3,12 +3,14 @@ pipeline {
 
     tools {
         nodejs 'node16'
+        'hudson.plugins.sonar.SonarRunnerInstallation' 'sonar-scanner'
     }
 
     environment {
         DOCKERHUB_CREDENTIALS = credentials('docker')
         APP_NAME = "youtube-clone"
         DOCKER_USER = "h4rrybrwnie"
+        SCANNER_HOME = tool 'sonar-scanner'
     }
 
     stages {
