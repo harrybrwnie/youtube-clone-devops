@@ -42,7 +42,9 @@ pipeline {
         stage('3. Quet Thu vien (OWASP SCA)') {
             steps {
                 echo 'Bat dau quet lo hong thu vien...'
-                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableRetireJS --nvdApiKey ${NVD_API_KEY}', odcInstallation: 'DP-Check'
+                withEnv(['JAVA_OPTS=-Xmx1536m -XX:+UseG1GC']) {
+                    dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableRetireJS --nvdApiKey ${NVD_API_KEY}', odcInstallation: 'DP-Check'
+                }
                 dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
             }
         }
