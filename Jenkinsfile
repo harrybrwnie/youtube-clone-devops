@@ -26,11 +26,14 @@ pipeline {
                 echo 'Gui code sang SonarQube kiem tra'
                 withSonarQubeEnv('sonar-server') { 
                     sh '''
+                    NODE_PATH=$(which node)
+                    echo "Dung NodeJS tai $NODE_PATH"
                     $SCANNER_HOME/bin/sonar-scanner \
                     -Dsonar.organization=harrybrwnie \
                     -Dsonar.projectKey=harrybrwnie_youtube-clone-devops \
                     -Dsonar.sources=src \
                     -Dsonar.exclusions=**/node_modules/**
+                    -Dsonar.nodejs.executable=$NODE_PATH
                     '''
                 }
             }
