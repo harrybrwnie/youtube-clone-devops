@@ -1,3 +1,4 @@
+
 pipeline {
     agent any
 
@@ -32,8 +33,7 @@ pipeline {
                     -Dsonar.organization=harrybrwnie \
                     -Dsonar.projectKey=harrybrwnie_youtube-clone-devops \
                     -Dsonar.sources=src \
-                    -Dsonar.exclusions=**/node_modules/** \
-                    -Dsonar.nodejs.executable=$NODE_PATH
+                    -Dsonar.exclusions=**/node_modules/**
                     '''
                 }
             }
