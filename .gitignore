@@ -1,0 +1,32 @@
+# 1. Thư viện Node.js (Nặng và có thể tải lại bằng npm install)
+node_modules/
+dist/
+build/
+
+# 2. Các file chứa bí mật (CỰC KỲ QUAN TRỌNG)
+secret.txt
+jenkins_token
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# 3. Các file log (rác sinh ra khi chạy phần mềm)
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# 4. Các file của Hệ điều hành và Trình soạn thảo
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.bak
+
+# 5. Các file Terraform (đề phòng bạn di chuyển nhầm vào đây)
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfvars

@@ -28,7 +28,9 @@ pipeline {
                     sh '''
                     $SCANNER_HOME/bin/sonar-scanner \
                     -Dsonar.projectName=${APP_NAME} \
-                    -Dsonar.projectKey=${APP_NAME}
+                    -Dsonar.projectKey=${APP_NAME} \
+                    -Dsonar.sources=src \
+                    -Dsonar.exclusions=**/node_modules/**
                     '''
                 }
             }
