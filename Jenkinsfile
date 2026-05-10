@@ -12,6 +12,7 @@ pipeline {
         APP_NAME = "youtube-clone"
         DOCKER_USER = "h4rrybrwnie"
         SCANNER_HOME = tool 'sonar-scanner'
+        NVD_API_KEY = credentials('nvd-api-key')
     }
 
     stages {
@@ -41,7 +42,7 @@ pipeline {
         stage('3. Quet Thu vien (OWASP SCA)') {
             steps {
                 echo 'Bat dau quet lo hong thu vien...'
-                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableRetireJS', odcInstallation: 'DP-Check'
+                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableRetireJS --nvdApiKey ${NVD_API_KEY}', odcInstallation: 'DP-Check'
                 dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
             }
         }
