@@ -4,6 +4,7 @@ pipeline {
     tools {
         nodejs 'node16'
         'hudson.plugins.sonar.SonarRunnerInstallation' 'sonar-scanner'
+        'org.jenkinsci.plugins.DependencyCheck.tools.DependencyCheckInstallation' 'DP-Check'
     }
 
     environment {
@@ -36,6 +37,14 @@ pipeline {
             }
         }
 
+
+        stage('3. Quet Thu vien (OWASP SCA)') {
+            steps {
+                echo 'Bat dau quet lo hong thu vien...'
+                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableRetireJS', odcInstallation: 'DP-Check'
+                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+            }
+        }
         stage('4. Cai dat thu vien') {
             steps {
                 echo 'Dang chay npm install...'
