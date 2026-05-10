@@ -3,14 +3,12 @@ pipeline {
 
     tools {
         nodejs 'node16'
-        'hudson.plugins.sonar.SonarRunnerInstallation' 'sonar-scanner'
     }
 
     environment {
         DOCKERHUB_CREDENTIALS = credentials('docker')
         APP_NAME = "youtube-clone"
         DOCKER_USER = "h4rrybrwnie"
-        SCANNER_HOME = tool 'sonar-scanner'
     }
 
     stages {
@@ -21,20 +19,20 @@ pipeline {
             }
         }
 
-//        stage('2. Quet code (SonarQube)') {
-//            steps {
-//                echo 'Gui code sang SonarQube kiem tra'
-//                withSonarQubeEnv('sonar-server') { 
-//                    sh '''
-//                    $SCANNER_HOME/bin/sonar-scanner \
-//                    -Dsonar.organization=harrybrwnie \
-//                    -Dsonar.projectKey=harrybrwnie_youtube-clone-devops \
-//                    -Dsonar.sources=src \
-//                    -Dsonar.exclusions=**/node_modules/**
-//                    '''
-//                }
-//            }
-//        }
+        stage('2. Quet code (SonarQube)') {
+            steps {
+                echo 'Gui code sang SonarQube kiem tra'
+                withSonarQubeEnv('sonar-server') { 
+                    sh '''
+                    $SCANNER_HOME/bin/sonar-scanner \
+                    -Dsonar.organization=harrybrwnie \
+                    -Dsonar.projectKey=harrybrwnie_youtube-clone-devops \
+                    -Dsonar.sources=src \
+                    -Dsonar.exclusions=**/node_modules/**
+                    '''
+                }
+            }
+        }
 
 
         stage('3. Quet Thu vien (Trivy FS)') {
@@ -43,21 +41,29 @@ pipeline {
                 sh "trivy fs --format table -o trivy-fs-report.txt --severity HIGH,CRITICAL ."
             }
         }
-        stage('4. Cai dat thu vien') {
+
+        stage('4. Cai dat thu vien & Build') {
             steps {
                 echo 'Dang chay npm install...'
                 sh 'npm install'
             }
         }
 
-        stage('3. Build Docker Image') {
+        stage('5. Build Docker Image') {
             steps {
                 echo 'Dang build Docker Image...'
                 sh "docker build -t ${DOCKER_USER}/${APP_NAME}:latest ."
             }
         }
 
-        stage('4. Push Image len DockerHub') {
+        stage('6. Quet Docker Image (Trivy Image)') {
+            steps {
+                echo 'Kiem tra he dieu hanh cua Image vua Build...'
+                sh "trivy image --format table -o trivy-image-report.txt --severity HIGH,CRITICAL ${DOCKER_USER}/${APP_NAME}:latest"
+            }
+        }
+
+        stage('7. Push Image len DockerHub') {
             steps {
                 echo 'Dang login va push...'
                 sh "echo \$DOCKERHUB_CREDENTIALS_PSW | docker login -u \$DOCKERHUB_CREDENTIALS_USR --password-stdin"
@@ -69,7 +75,6 @@ pipeline {
     post {
         always {
             echo 'Hoan tat Pipeline, dang don dep...'
-            // Xóa image vừa build trên máy chủ Jenkins để tiết kiệm dung lượng
             sh "docker rmi ${DOCKER_USER}/${APP_NAME}:latest || true"
         }
     }
