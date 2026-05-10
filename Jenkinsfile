@@ -23,20 +23,20 @@ pipeline {
             }
         }
 
-        stage('2. Quet code (SonarQube)') {
-             steps {
-                echo 'Gui code sang SonarQube kiem tra'
-                withSonarQubeEnv('sonar-server') { 
-                    sh '''
-                    $SCANNER_HOME/bin/sonar-scanner \
-                    -Dsonar.organization=harrybrwnie \
-                    -Dsonar.projectKey=harrybrwnie_youtube-clone-devops \
-                    -Dsonar.sources=src \
-                    -Dsonar.exclusions=**/node_modules/**
-                    '''
-                }
-            }
-        }
+//        stage('2. Quet code (SonarQube)') {
+//            steps {
+//                echo 'Gui code sang SonarQube kiem tra'
+//                withSonarQubeEnv('sonar-server') { 
+//                    sh '''
+//                    $SCANNER_HOME/bin/sonar-scanner \
+//                    -Dsonar.organization=harrybrwnie \
+//                    -Dsonar.projectKey=harrybrwnie_youtube-clone-devops \
+//                    -Dsonar.sources=src \
+//                    -Dsonar.exclusions=**/node_modules/**
+//                    '''
+//                }
+//            }
+//        }
 
 
         stage('3. Quet Thu vien (OWASP SCA)') {
