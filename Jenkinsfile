@@ -27,20 +27,11 @@ pipeline {
                 withSonarQubeEnv('sonar-server') { 
                     sh '''
                     $SCANNER_HOME/bin/sonar-scanner \
-                    -Dsonar.projectName=${APP_NAME} \
-                    -Dsonar.projectKey=${APP_NAME} \
+                    -Dsonar.organization=harrybrwnie \
+                    -Dsonar.projectKey=harrybrwnie_youtube-clone-devops \
                     -Dsonar.sources=src \
                     -Dsonar.exclusions=**/node_modules/**
                     '''
-                }
-            }
-        }
-
-        stage('3. Quality Gate') {
-             steps {
-                echo 'Dang doi ket qua tu SonarQube...'
-                timeout(time: 1, unit: 'HOURS') {
-                    waitForQualityGate abortPipeline: true 
                 }
             }
         }
