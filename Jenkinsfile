@@ -3,7 +3,7 @@ pipeline {
     agent any
 
     tools {
-        nodejs 'node18'
+        nodejs 'node16'
         'hudson.plugins.sonar.SonarRunnerInstallation' 'sonar-scanner'
     }
 
