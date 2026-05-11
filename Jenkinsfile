@@ -75,6 +75,24 @@ pipeline {
                 sh "docker push ${DOCKER_USER}/${APP_NAME}:latest"
             }
         }
+       
+        stage('8. Deploy to AWS EKS') {
+            steps {
+                echo 'Bat dau trien khai len AWS EKS...'
+                withAWS(credentials: 'aws-cred', region: 'ap-southeast-2') {
+                    sh '''
+                    echo "Ket noi den EKS Cluster..."
+                    aws eks update-kubeconfig --name Youtube-EKS-Cluster --region ap-southeast-2
+                    
+                    echo "Kiem tra ket noi:"
+                    kubectl get nodes
+                    
+                    echo "Deploy ung dung:"
+                    kubectl apply -f k8s-deployment.yaml
+                    '''
+                }
+            }
+        }
     }
 
     post {
