@@ -1,7 +1,21 @@
-FROM node:18-alpine
+FROM node:18-alpine AS builder
 WORKDIR /app
+
 COPY package*.json ./
 RUN npm install
+
 COPY . .
-EXPOSE 3000
-CMD ["npm", "start"]
+
+ARG REACT_APP_RAPID_API_KEY
+ENV REACT_APP_RAPID_API_KEY=$REACT_APP_RAPID_API_KEY
+
+RUN npm run build
+
+
+FROM nginx:alpine
+
+COPY --from=builder /app/build /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]

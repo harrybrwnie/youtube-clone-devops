@@ -20,7 +20,7 @@ spec:
         image: h4rrybrwnie/youtube-clone:latest
         imagePullPolicy: Always
         ports:
-        - containerPort: 3000
+        - containerPort: 80
 
 ---
 apiVersion: v1
@@ -34,4 +34,4 @@ spec:
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 3000
+      targetPort: 80
