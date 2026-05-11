@@ -60,7 +60,7 @@ pipeline {
             }
             steps {
                 echo 'Dang build Docker Image...'
-                sh "docker build --build-arg REACT_APP_RAPID_API_KEY=$(RAPID_API_KEY) -t ${DOCKER_USER}/${APP_NAME}:latest ."
+                sh "docker build --build-arg REACT_APP_RAPID_API_KEY=${RAPID_API_KEY} -t ${DOCKER_USER}/${APP_NAME}:latest ."
             }
         }
 
