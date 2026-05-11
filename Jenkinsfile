@@ -56,7 +56,7 @@ pipeline {
 
         stage('5. Build Docker Image') {
             environment {
-              RAPID_APY_KEY = crendentials('rapid-api-key')
+              RAPID_API_KEY = credentials('rapid-api-key')
             }
             steps {
                 echo 'Dang build Docker Image...'
