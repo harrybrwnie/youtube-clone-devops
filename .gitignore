@@ -1,32 +1,62 @@
-# 1. Thư viện Node.js (Nặng và có thể tải lại bằng npm install)
-node_modules/
-dist/
-build/
-
-# 2. Các file chứa bí mật (CỰC KỲ QUAN TRỌNG)
+# =====================
+# Secrets / Credentials
+# =====================
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+*.secret
 secret.txt
-jenkins_token
+secrets.*
+*.env
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.*
+!.env.example
 
-# 3. Các file log (rác sinh ra khi chạy phần mềm)
+jenkins_token
+jenkins-sonarcloud.secret
+Jenkins-Key.pem
+
+# =====================
+# Terraform
+# =====================
+.terraform/
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.*
+*.tfvars
+*.tfvars.json
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+**/.terraform/
+terraform.tfstate
+terraform.tfstate.*
+**/terraform.tfstate
+**/terraform.tfstate.*
+# =====================
+# Node.js
+# =====================
+node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.pnpm-debug.log*
+dist/
+build/
 
-# 4. Các file của Hệ điều hành và Trình soạn thảo
+# =====================
+# OS / Editor
+# =====================
 .DS_Store
+Thumbs.db
 .vscode/
 .idea/
-*.swp
-*.bak
 
-# 5. Các file Terraform (đề phòng bạn di chuyển nhầm vào đây)
-.terraform/
-*.tfstate
-*.tfstate.backup
-*.tfvars
+# =====================
+# Jenkins / Local files
+# =====================
+*.log
